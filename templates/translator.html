@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+{%load static%}
+<head>
+  <link rel="stylesheet" type="text/css" href="{% static 'translator.css' %}">
+</head>
+
+<div class="container">
+    <form action="{% url 'translator_view' %}" method="post">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-sm-6 mt-3 left">
+                <textarea class="form-control" rows="3" name="my_textarea" onkeydown="return (event.keyCode!=13);" >{{original_text}}</textarea>
+            </div>
+            <div class="col-sm-6 mt-3 left">
+                <textarea class="form-control" rows="3">{{output_text}}</textarea>
+                <input id="mybtn" class="btn btn-primary ml-3 mt-3" name="submit" type="submit" value="Translate">
+            </div>
+        </div>
+        <div>
+          <input class="button" style="border:0px solid black; background-color: transparent; color:blue; text-decoration:underline " type="submit" name="didyoumean" value="{{message_text}}">
+        </div>
+    </form>
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th scope="col">Türkçe Tanım</th>
+            <th scope="col">English Definition</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{tnm_text}}</td>
+            <td>{{dfn_text}}</td>
+          </tr>
+      </div>
+</div>
+
+<script>
+var input = document.getElementById("mybtn");
+input.addEventListener("keyup", function(event) {
+  if (event.keyCode === 13) {
+   event.preventDefault();
+   document.getElementById("mybtn").click();
+  }
+});
+</script>
+{% endblock content %}
