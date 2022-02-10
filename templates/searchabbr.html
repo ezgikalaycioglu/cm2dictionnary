@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <center>
+      {% if searched %}
+        {% if words %}
+          <table class="table table-hover">
+            <div class="table-responsive">
+              <table class="table align-middle">
+                <thead>
+                  <tr>
+                    <th scope="col">Kısaltma</th>
+                    <th scope="col">Anlamı</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                {% for word in words %}
+
+                <tr>
+                  <td>{{ word.abr }}</td>
+                  <td>{{ word.meaning }}</td>
+
+
+                </tr>
+
+                {% endfor %}
+              </tbody>
+            </div>
+          </table>
+          <h4>
+            <a class="btn btn-secondary" href="{% url 'abbr_view' %}">Tüm kısaltmalara geri dön.</a>
+          </h4>
+        {% else %}
+        <h1 style="padding:2vw"> Bu kısaltmayı bulamadık. </h1>
+        <a class="btn btn-secondary" href="{% url 'abbr_view' %}">Tüm kısaltmalara geri dön.</a>
+        <p style="padding-top:1vw"><a href="{% url 'contact_view'%}">Bu kısaltma için bir açıklama öner</a></p>
+        {% endif %}
+      {% else %}
+        <h1 style="padding:2vw"> Arama çubuğuna herhangi bir şey yazmadınız. </h1>
+        <a class="btn btn-secondary" href="{% url 'abbr_view' %}">Tüm kısaltmalara geri dön.</a>
+      {% endif %}
+
+</div>
+
+{% endblock content %}

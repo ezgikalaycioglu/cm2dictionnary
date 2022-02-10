@@ -1,49 +1,95 @@
 {% extends 'base.html' %}
 {% block content %}
-{%load static%}
+{% load static %}
+
+
 <head>
-  <link rel="stylesheet" type="text/css" href="{% static 'translator.css' %}">
+  <link rel="stylesheet" href="{% static 'cm2dict\css\translator.css' %}">
 </head>
 
+
+
 <div class="container">
-    <form action="{% url 'translator_view' %}" method="post">
+
+
+  <div class="row">
+    <div class="col-xxs-12 col-xs-12 col-s-12 col-m-12 col-l-12">
+      <center>
+          <img src="{% static 'CM2dict/media/cm2dict.png' '%}" alt="cm2dict_logo" class="img-fluid" style="max-height: 10vh">
+      </center>
+    </div>
+    <div class="col-xxs-12 col-xs-12 col-s-12 col-m-12 col-l-">
+      <form class="d-flex" method=POST action="{% url 'translator_view' %}" style="padding-bottom:2vw">
         {% csrf_token %}
-        <div class="row">
-            <div class="col-sm-6 mt-3 left">
-                <textarea class="form-control" rows="3" name="my_textarea" onkeydown="return (event.keyCode!=13);" >{{original_text}}</textarea>
-            </div>
-            <div class="col-sm-6 mt-3 left">
-                <textarea class="form-control" rows="3">{{output_text}}</textarea>
-                <input id="mybtn" class="btn btn-primary ml-3 mt-3" name="submit" type="submit" value="Translate">
-            </div>
-        </div>
-        <div>
-          <input class="button" style="border:0px solid black; background-color: transparent; color:blue; text-decoration:underline " type="submit" name="didyoumean" value="{{message_text}}">
-        </div>
-    </form>
-    <div class="table-responsive">
-      <table class="table align-middle">
-        <thead>
-          <tr>
-            <th scope="col">Türkçe Tanım</th>
-            <th scope="col">English Definition</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{{tnm_text}}</td>
-            <td>{{dfn_text}}</td>
-          </tr>
+        <input class="form-control me-2" list="allterms" autocomplete="off"
+          type="search" placeholder="Türkçe veya Ingilizce" aria-label="Search" name="my_textarea">
+        <datalist id="allterms">
+          {% for item in items %}
+            <option value="{{ item.eng }}">
+            <option value="{{ item.tr }}">
+          {% endfor %}
+        </datalist>
+        <button class="btn btn-secondary" name="submit" type="submit">Çeviri</button>
+      </form>
+    </div>
+
+  </div >
+
+      {% if original_text %}
+      <div>
+        <center>
+          <p class="a1">{{original_text}}</p>
+        </center>
       </div>
+      {% else %}
+        <p> </p>
+      {% endif %}
+
+    {% if dyms %}
+    <center>
+      <p style="padding-top:1vw"> {{message_text1}} </p>
+      <form action="{% url 'translator_view' %}" method="post">
+        <div>
+          {% for dym in dyms %}
+            {% csrf_token %}
+            <input class="button" type="submit" style="border:0px solid black; background-color: transparent; color:blue; text-decoration:none" name="didyoumean" value="{{dym}}"></br>
+          {% endfor %}
+        </div>
+      </form>
+      <p style="padding-top:1vw"><a style="color:magenta" href="{% url 'contact_view'%}">{{message_text2}}</a></p>
+    </center>
+    {% endif %}
+
+    {% if output_text %}
+      <div>
+        <center>
+          <p class="a1">{{output_text}}</p>
+        </center>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table align-middle">
+          <thead>
+            <tr>
+              <th scope="col">Türkçe Tanım</th>
+              <th scope="col">English Definition</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{tnm_text}}</td>
+              <td>{{dfn_text}}</td>
+            </tr>
+        </div>
+
+    {% else %}
+      <p> </p>
+    {% endif %}
+    <center>
+      <p style="padding-top:1vw">
+        <a href="{% url 'contact_view'%}">{{message_text}}</a>
+      </p>
+    </center>
 </div>
 
-<script>
-var input = document.getElementById("mybtn");
-input.addEventListener("keyup", function(event) {
-  if (event.keyCode === 13) {
-   event.preventDefault();
-   document.getElementById("mybtn").click();
-  }
-});
-</script>
 {% endblock content %}

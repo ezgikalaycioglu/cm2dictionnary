@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<head>
+  <title>Tüm Terimler</title>
+</head>
+
+<div class="container">
+
+    <form class="d-flex" method=POST action="{% url 'search_abbr_view' %}">
+      {% csrf_token %}
+      <input class="form-control me-2" list="allabbrs" autocomplete="off"
+        type="search" placeholder="Tüm kısaltmalarda arayın" aria-label="Search" name="searched">
+      <datalist id="allabbrs">
+        {% for item in items %}
+          <option value="{{ item.abr }}">
+        {% endfor %}
+      </datalist>
+      <button class="btn btn-secondary" type="submit">Ara</button>
+    </form>
+
+  <table class="table table-hover">
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th scope="col">Kısaltma</th>
+            <th scope="col">Anlamı</th>
+          </tr>
+        </thead>
+        <tbody>
+
+        {% for item in items %}
+
+        <tr>
+          <td>{{ item.abr }}</td>
+          <td>{{ item.meaning }}</td>
+        </tr>
+
+        {% endfor %}
+      </tbody>
+    </div>
+  </table>
+</div>
+
+
+{% endblock content %}
