@@ -10,10 +10,9 @@
 </head>
 
 <body>
-
   <div class="container">
 
-      <form class="d-flex" method=POST action="{% url 'search_allterms_view' %}">
+      <form class="d-flex" method=POST action="{% url 'search_allterms_view' %}" style="padding-bottom:2vw; padding-top:2vw;">
         {% csrf_token %}
         <input class="form-control me-2" list="allterms" autocomplete="off"
           type="search" placeholder="Tüm terimlerde arayın" aria-label="Search" name="searched">

@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 
-class Terms(models.Model):
+class Term(models.Model):
     tr = models.CharField(max_length=200, null=True, blank=True)
     eng = models.CharField(max_length=200, null=True, blank=True)
 

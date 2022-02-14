@@ -10,54 +10,63 @@
 
 
 <div class="container">
-
-
-  <div class="row">
-    <div class="col-xxs-12 col-xs-12 col-s-12 col-m-12 col-l-12">
+    <form class="d-flex" method=POST action="{% url 'translator_view' %}" style="padding-bottom:2vw; padding-top:2vw">
+      {% csrf_token %}
+      <input class="form-control me-2" list="allterms" autocomplete="off"
+        type="search" placeholder="Türkçe veya Ingilizce" aria-label="Search" name="my_textarea">
+      <datalist id="allterms">
+        {% for item in items %}
+          <option value="{{ item.eng }}">
+          <option value="{{ item.tr }}">
+        {% endfor %}
+      </datalist>
+      <button class="btn btn-secondary" name="submit" type="submit">Çeviri</button>
+    </form>
+    {% if original_text %}
+    <div>
       <center>
-          <img src="{% static 'CM2dict/media/cm2dict.png' '%}" alt="cm2dict_logo" class="img-fluid" style="max-height: 10vh">
+        <p class="a1">{{original_text}}</p>
       </center>
     </div>
-    <div class="col-xxs-12 col-xs-12 col-s-12 col-m-12 col-l-">
-      <form class="d-flex" method=POST action="{% url 'translator_view' %}" style="padding-bottom:2vw">
-        {% csrf_token %}
-        <input class="form-control me-2" list="allterms" autocomplete="off"
-          type="search" placeholder="Türkçe veya Ingilizce" aria-label="Search" name="my_textarea">
-        <datalist id="allterms">
-          {% for item in items %}
-            <option value="{{ item.eng }}">
-            <option value="{{ item.tr }}">
-          {% endfor %}
-        </datalist>
-        <button class="btn btn-secondary" name="submit" type="submit">Çeviri</button>
-      </form>
-    </div>
-
-  </div >
-
-      {% if original_text %}
-      <div>
-        <center>
-          <p class="a1">{{original_text}}</p>
-        </center>
+    {% else %}
+      <div class="tanitim">
+        <p> Sempro CM2 Dictionary size CM2 terimlerini arayabileceğiniz kapsamlı bir sözlük hizmeti sunmaktadır. Terimleri Türkçe/Ingilizce veya Ingilizce/Türkçe çevirebilir, yeni terim eklemek için veya çevirileri düzeltmek için <a href="{% url 'contact_view'%}">IR (Investigation Request) form</a> yollayabilirsiniz.</p>
       </div>
-      {% else %}
-        <p> </p>
-      {% endif %}
+      <div class="logolar">
+        <div class="row">
+          <div class="col-xxs-6 col-xs-6 col-s-6 col-m-3 col-l-3">
+            <img src="{% static 'CM2dict/media/tumterimler.png' '%}" alt="tumterimlert_logo" class="img-fluid" id="tumterimler">
+          </div>
+          <div class="col-xxs-6 col-xs-6 col-s-6 col-m-3 col-l-3" id="tumterimlertxt">
+            <h3>Tüm terimler</h3>
+            <p>Tüm terimler içinde arama yapabilir, terimleri alfabetik olarak sıralayabilirsiniz.</p>
+            <a class="btn btn-secondary" href="{% url 'display_allterms_view'%}">Tüm terimler</a>
+          </div>
+          <div class="col-xxs-6 col-xs-6 col-s-6 col-m-3 col-l-3">
+            <img src="{% static 'CM2dict/media/kisaltmalar.png' '%}" alt="kisaltmalar_logo" class="img-fluid" id="tumterimler">
+          </div>
+          <div class="col-xxs-6 col-xs-6 col-s-6 col-m-3 col-l-3" id="tumterimlertxt">
+            <h3>Kısaltmalar</h3>
+            <p>Kısaltmalar içinde arama yapabilirsiniz.</p>
+            <a class="btn btn-secondary" href="{% url 'abbr_view' %}">Kısaltmalar</a>
+          </div>
+        </div>
+      </div>
+    {% endif %}
 
     {% if dyms %}
-    <center>
-      <p style="padding-top:1vw"> {{message_text1}} </p>
-      <form action="{% url 'translator_view' %}" method="post">
-        <div>
-          {% for dym in dyms %}
-            {% csrf_token %}
-            <input class="button" type="submit" style="border:0px solid black; background-color: transparent; color:blue; text-decoration:none" name="didyoumean" value="{{dym}}"></br>
-          {% endfor %}
-        </div>
-      </form>
-      <p style="padding-top:1vw"><a style="color:magenta" href="{% url 'contact_view'%}">{{message_text2}}</a></p>
-    </center>
+      <center>
+        <p style="padding-top:1vw"> {{message_text1}} </p>
+        <form action="{% url 'translator_view' %}" method="post">
+          <div>
+            {% for dym in dyms %}
+              {% csrf_token %}
+              <input class="button" type="submit" style="border:0px solid black; background-color: transparent; color:blue; text-decoration:none" name="didyoumean" value="{{dym}}"></br>
+            {% endfor %}
+          </div>
+        </form>
+        <p style="padding-top:1vw"><a style="color:magenta" href="{% url 'contact_view'%}">{{message_text2}}</a></p>
+      </center>
     {% endif %}
 
     {% if output_text %}
@@ -85,11 +94,11 @@
     {% else %}
       <p> </p>
     {% endif %}
+
     <center>
       <p style="padding-top:1vw">
         <a href="{% url 'contact_view'%}">{{message_text}}</a>
       </p>
     </center>
 </div>
-
 {% endblock content %}

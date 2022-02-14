@@ -6,7 +6,7 @@ from .models import *
 # Register your models here.
 
 # admin.site.register(item)
-@admin.register(Terms)
+@admin.register(Term)
 class ViewAdmin(ImportExportModelAdmin):
     list_display= ('id', 'tr', 'eng')
 

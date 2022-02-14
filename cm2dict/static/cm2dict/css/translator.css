@@ -103,3 +103,19 @@
 .cm2dictlogo {
   max-width: 2vw;
 }
+
+.tanitim {
+  text-align:justify;
+}
+
+#tumterimler{
+  border-radius: 50%;
+  /*max-width: 10vw;*/
+  /*float:left;*/
+
+}
+
+#tumterimlertxt{
+  margin:auto;
+  float: left;
+}

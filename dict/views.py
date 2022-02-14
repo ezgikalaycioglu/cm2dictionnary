@@ -10,14 +10,14 @@ from django.http import HttpResponseRedirect
 
 def translator_view(request):
     message=""
-    items = Terms.objects.all()
+    items = Term.objects.all()
     global data
     data=pd.DataFrame(
-        {'id': Terms.objects.values_list('id',flat=True),
-         'tr': Terms.objects.values_list('tr',flat=True),
-         'eng': Terms.objects.values_list('eng',flat=True),
-         'tnm':Terms.objects.values_list('tnm',flat=True),
-         'dfn': Terms.objects.values_list('dfn',flat=True)
+        {'id': Term.objects.values_list('id',flat=True),
+         'tr': Term.objects.values_list('tr',flat=True),
+         'eng': Term.objects.values_list('eng',flat=True),
+         'tnm':Term.objects.values_list('tnm',flat=True),
+         'dfn': Term.objects.values_list('dfn',flat=True)
         })
     if 'submit' in request.POST: #if we press the button
         original_text=request.POST['my_textarea']
@@ -63,7 +63,7 @@ def all_terms(request):
     return render(request, 'all_terms.html')
 
 def display_allterms(request):
-    items = Terms.objects.all()
+    items = Term.objects.all()
     context = {
         'items': items,
     }
@@ -72,13 +72,13 @@ def display_allterms(request):
 def search_allterms(request):
     if request.method == "POST":
         searched= request.POST['searched']
-        words=Terms.objects.filter(tr__contains=searched) | Terms.objects.filter(eng__contains=searched)
+        words=Term.objects.filter(tr__contains=searched) | Term.objects.filter(eng__contains=searched)
         return render(request, 'search.html', {'searched':searched, 'words':words})
     else:
         return render(request, 'search.html', {})
 
-def contact_view(request):
-    return render(request, 'contact.html')
+#def contact_view(request):
+#    return render(request, 'contact.html')
 
 
 def all_abbrs(request):
