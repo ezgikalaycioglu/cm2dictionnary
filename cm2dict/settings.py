@@ -137,7 +137,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 CONTACT_EMAIL = 'cm2sozluk@gmail.com'
-ADMIN_EMAIL = ['cm2sozluk@gmail.com' ]
+ADMIN_EMAIL = ['cm2sozluk@gmail.com','info@sempro.com' ]
 
 
 # Twilio SendGrid
