@@ -69,6 +69,9 @@
       </center>
     {% endif %}
 
+    {% if extrabtn %}
+      <center><a class="btn btn-secondary" href="{% url 'display_allterms_view'%}">Tüm terimlere geri dönün.</a></center>
+    {% endif %}
     {% if output_text %}
       <div>
         <center>

@@ -5,13 +5,19 @@ from .models import *
 from .forms import *
 import pandas as pd
 from django.http import HttpResponseRedirect
+from django.views.decorators.csrf import csrf_protect
 
 # Create your views here.
 
+@csrf_protect
 def translator_view(request):
     message=""
     items = Term.objects.all()
     global data
+    global dyms
+    global lendym
+    global extrabtn
+    extrabtn=False
     data=pd.DataFrame(
         {'id': Term.objects.values_list('id',flat=True),
          'tr': Term.objects.values_list('tr',flat=True),
@@ -24,8 +30,6 @@ def translator_view(request):
         print(original_text)
         output=translate.translate(original_text, data)[0]
         message=translate.translate(original_text, data)[1]
-        global dyms
-        global lendym
         dyms=translate.translate(original_text, data)[2]
         lendym=(len(dyms))
         print(lendym)
@@ -53,11 +57,25 @@ def translator_view(request):
         original_text=value
         output=translate.translate(original_text, data)[0]
         message=translate.translate(original_text, data)[1]
-        tnm=translate.translate(original_text, data )[3]
+        dyms=translate.translate(original_text, data)[2]
+        lendym=(len(dyms))
+        print(lendym)
+        tnm=translate.translate(original_text, data)[3]
         dfn=translate.translate(original_text, data)[4]
-        return render(request, 'translator.html', {'output_text':output, 'original_text':original_text, 'message_text':message[0], 'tnm_text':tnm, 'dfn_text':dfn, 'items': items})
-    else: #if we refresh the page
-        return render(request, 'translator.html',{'items': items})
+        if output:
+            return render(request, 'translator.html', {'output_text':output, 'original_text':original_text, 'message_text':message[0], 'tnm_text':tnm, 'dfn_text':dfn, 'items': items})
+        elif lendym:
+            extrabtn=True
+            return render(request, 'translator.html', {'original_text':original_text, 'dyms':dyms, 'message_text1':message[0], 'message_text2':message[1], 'items': items, 'extrabtn':extrabtn})
+        elif message: #if we refresh the page
+            extrabtn=True
+            return render(request, 'translator.html',{'message_text':message[0], 'items': items, 'original_text':original_text, 'extrabtn':extrabtn})
+        else:
+            #return render(request, 'translator.html')
+            return render(request, 'translator.html', {'items': items})
+    else:
+        #return render(request, 'translator.html')
+        return render(request, 'translator.html', {'items': items})
 
 def all_terms(request):
     return render(request, 'all_terms.html')
@@ -94,6 +112,7 @@ def display_allabbrs(request):
 def search_allabbrs(request):
     if request.method == "POST":
         searched= request.POST['searched']
+        searched=searched.upper()
         words=Abr.objects.filter(abr__contains=searched)
         return render(request, 'searchabbr.html', {'searched':searched, 'words':words})
     else:
